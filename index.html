@@ -1,206 +1,437 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bel-Engleezi | Professional Assessment</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
-    <style>
-        :root { --p-gold: #fbbf24; --p-blue: #0f172a; }
-        body { margin: 0; font-family: 'Montserrat', 'Cairo', sans-serif; color: #fff; background-color: var(--p-blue); overflow-x: hidden; user-select: none; }
-        
-        /* منع النسخ واللصق */
-        * { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
 
-        .glass-card { background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        
-        /* تصميم اللوجو المحدث */
-        .logo-box { width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--p-gold); overflow: hidden; background: #fff; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
-        /* ميكانيكا الساحر */
-        .magic-card { position: absolute; width: 110px; height: 150px; transition: all 0.5s ease-in-out; transform-style: preserve-3d; cursor: pointer; }
-        .magic-card.flipped .inner { transform: rotateY(180deg); }
-        .inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; }
-        .front, .back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 10px; display: flex; align-items: center; justify-content: center; border: 2px solid var(--p-gold); }
-        .front { background: var(--p-gold); color: #000; font-weight: 900; }
-        .back { background: #1e293b; color: var(--p-gold); transform: rotateY(180deg); font-size: 2rem; }
-    </style>
+<title>Bel-Engleezi Assessment</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+font-family:Montserrat,Cairo;
+margin:0;
+color:white;
+background:#020617;
+overflow-x:hidden;
+}
+
+.bg{
+position:fixed;
+width:100%;
+height:100%;
+z-index:-1;
+background:linear-gradient(-45deg,#020617,#1e1b4b,#172554,#0f172a);
+background-size:400% 400%;
+animation:grad 15s ease infinite;
+}
+
+@keyframes grad{
+0%{background-position:0% 50%}
+50%{background-position:100% 50%}
+100%{background-position:0% 50%}
+}
+
+.card{
+background:rgba(15,23,42,.88);
+backdrop-filter:blur(20px);
+border-radius:26px;
+border:1px solid rgba(255,255,255,.08);
+}
+
+.option{
+background:#1e293b;
+padding:16px;
+border-radius:12px;
+border:1px solid #334155;
+cursor:pointer;
+}
+
+.option:hover{
+border-color:#fbbf24;
+}
+
+.correct{
+background:#065f46;
+}
+
+.wrong{
+background:#7f1d1d;
+}
+
+.explain{
+color:#fbbf24;
+margin-top:10px;
+font-size:14px;
+}
+
+.stage{
+position:relative;
+height:220px;
+}
+
+.mem{
+width:120px;
+height:150px;
+position:absolute;
+border-radius:12px;
+border:2px solid #fbbf24;
+display:flex;
+align-items:center;
+justify-content:center;
+cursor:pointer;
+background:#1e293b;
+}
+
+.logoBack{
+background:url(logo.jpg) center/cover;
+}
+
+</style>
+
 </head>
-<body oncontextmenu="return false;"> <header class="p-4 flex justify-between items-center bg-slate-900/80 sticky top-0 z-50 border-b border-white/10">
-        <div class="flex items-center gap-3">
-            <div class="logo-box">
-                <img src="logo.jpg" alt="BE" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=BE&background=fbbf24&color=000';">
-            </div>
-            <div>
-                <h1 class="text-lg font-black text-white uppercase leading-none">Bel-Engleezi</h1>
-                <span class="text-yellow-500 text-[10px] font-bold tracking-[0.2em] uppercase">Academy</span>
-            </div>
-        </div>
-        <div id="timer-box" class="hidden font-mono text-xl text-yellow-500 border border-yellow-500/30 px-4 py-1 rounded-full">30:00</div>
-    </header>
 
-    <main class="min-h-[80vh] flex items-center justify-center p-4">
-        <div id="start-screen" class="max-w-md w-full glass-card p-8 rounded-3xl text-center border-t-4 border-yellow-500">
-            <h2 class="text-2xl font-black mb-6">Student Enrollment</h2>
-            <div class="space-y-4" dir="rtl">
-                <input type="text" id="u-name" placeholder="الاسم بالكامل" class="w-full bg-slate-800 p-4 rounded-xl outline-none border border-slate-700 focus:border-yellow-500 text-center">
-                <select id="u-age" class="w-full bg-slate-800 p-4 rounded-xl border border-slate-700 text-center">
-                    <option value="" disabled selected>السن</option>
-                    <option value="Under 20">تحت 20</option>
-                    <option value="Over 20">فوق 20</option>
-                </select>
-            </div>
-            <button onclick="startApp()" class="w-full mt-8 bg-yellow-500 text-black font-black py-4 rounded-xl shadow-lg hover:bg-yellow-400 transition-all">START ASSESSMENT</button>
-        </div>
+<body>
 
-        <div id="quiz-area" class="hidden max-w-3xl w-full">
-            <div class="flex items-center gap-4 mb-6">
-                <div class="flex-grow h-2 bg-slate-800 rounded-full overflow-hidden">
-                    <div id="progress-fill" class="h-full bg-yellow-500 w-0 transition-all"></div>
-                </div>
-                <span id="q-counter" class="font-bold text-yellow-500">01/30</span>
-            </div>
+<div class="bg"></div>
 
-            <div class="glass-card p-8 rounded-3xl min-h-[400px] flex flex-col justify-center relative">
-                <div id="listening-tool" class="hidden mb-6 text-center">
-                    <button id="play-btn" onclick="playAudio()" class="bg-yellow-500/10 text-yellow-500 border border-yellow-500/50 px-6 py-2 rounded-full font-bold">🔊 Play Recording</button>
-                </div>
-                
-                <div id="reading-tool" class="hidden mb-6 p-4 bg-slate-800/50 rounded-xl border-l-4 border-yellow-500 italic text-lg"></div>
+<div class="flex justify-center mt-16">
 
-                <div id="writing-tool" class="hidden mb-6">
-                    <textarea id="writing-input" class="w-full bg-slate-800 border border-slate-700 p-4 rounded-xl text-white h-32 outline-none focus:border-yellow-500" placeholder="Type your answer here..."></textarea>
-                </div>
+<div class="card p-10 max-w-xl w-full text-center" id="start">
 
-                <div id="magic-tool" class="hidden h-[200px] relative mb-6"></div>
+<h1 class="text-3xl font-black mb-6">
+Bel-Engleezi Elite Test
+</h1>
 
-                <div id="q-text" class="text-xl font-bold mb-8 leading-relaxed"></div>
-                <div id="options-grid" class="grid grid-cols-1 gap-3"></div>
+<input id="name" placeholder="Full name" class="w-full p-3 rounded bg-slate-900 border border-slate-600 mb-4">
 
-                <button id="next-btn" onclick="nextQ()" class="hidden w-full mt-8 bg-white text-black py-4 rounded-xl font-black">NEXT ⮕</button>
-            </div>
-        </div>
-    </main>
+<button onclick="startTest()" class="bg-yellow-500 text-black px-8 py-3 rounded font-bold">
+Start Test
+</button>
 
-    <script>
-        // بنك الأسئلة المتكامل (30 سؤال)
-        const BANK = [
-            { type: "fun", q: "Welcome! To be 'Elite' in English, what is the first thing you should do?", a: ["Study grammar for 5 hours.", "Stop being afraid of making mistakes.", "Memorize the whole dictionary.", "Translate everything in your head."], c: 1 },
-            { type: "listening", text: "Attention passengers, the flight to London has been delayed due to heavy fog. We expect to depart in two hours. Please check the monitors for gate changes.", q: "Why is the flight delayed?", a: ["Engine trouble.", "Heavy fog.", "Pilot is late.", "Security check."], c: 1 },
-            { type: "listening", text: "I've been working at this firm for ten years. The culture is great, but the salary hasn't increased much. I'm considering looking for a new challenge next month.", q: "What is the speaker's main problem?", a: ["He hates his boss.", "The salary is too low.", "He wants to retire.", "He is new at the job."], c: 1 },
-            // ... (سأختصر هنا لتوفير المساحة، لكن الكود الفعلي يحتوي على الـ 30 سؤال كاملين)
-            { type: "writing", q: "Writing Task: Briefly explain why you want to improve your English." },
-            { type: "memory", words: ["Confidence", "Fluency", "Mastery", "Power"], target: "Mastery" }
-        ];
+</div>
 
-        // سأقوم بإضافة بقية الأسئلة برمجياً لضمان عدم التعليق
-        for(let i=0; i<25; i++) {
-            if(i < 5) BANK.push({ type: "grammar", q: `Advanced Grammar Q${i}: Choose the correct form.`, a: ["Option A", "Option B", "Option C", "Option D"], c: 0 });
-            else if(i < 10) BANK.push({ type: "reading", passage: "English is the global language of business...", q: "What is the main idea?", a: ["A", "B", "C", "D"], c: 1 });
-            else BANK.push({ type: "grammar", q: `Vocab Q${i}: Select the synonym.`, a: ["X", "Y", "Z", "W"], c: 2 });
-        }
+</div>
 
-        let state = { cur: 0, score: 0, user: {}, timer: 1800, logs: [] };
+<div id="quiz" class="hidden flex justify-center mt-10">
 
-        function startApp() {
-            state.user = { name: document.getElementById('u-name').value, age: document.getElementById('u-age').value };
-            if(!state.user.name || !state.user.age) return alert("Please fill your info");
-            
-            document.getElementById('start-screen').classList.add('hidden');
-            document.getElementById('quiz-area').classList.remove('hidden');
-            document.getElementById('timer-box').classList.remove('hidden');
-            
-            // كاشف الغش: لو خرج من الصفحة
-            window.onblur = () => { state.logs.push("User tried to leave the tab!"); };
+<div class="card p-8 max-w-3xl w-full">
 
-            render();
-        }
+<div id="counter" class="mb-4 text-yellow-400 font-bold"></div>
 
-        function render() {
-            const q = BANK[state.cur];
-            document.getElementById('q-counter').innerText = `${(state.cur+1).toString().padStart(2,'0')}/30`;
-            document.getElementById('progress-fill').style.width = `${((state.cur+1)/30)*100}%`;
-            
-            // Reset UI
-            ['listening-tool', 'reading-tool', 'writing-tool', 'magic-tool', 'next-btn'].forEach(id => document.getElementById(id).classList.add('hidden'));
-            document.getElementById('options-grid').innerHTML = "";
-            document.getElementById('q-text').innerText = q.q || "";
+<div id="question"></div>
 
-            if(q.type === 'listening') document.getElementById('listening-tool').classList.remove('hidden');
-            if(q.type === 'reading') {
-                document.getElementById('reading-tool').innerText = q.passage;
-                document.getElementById('reading-tool').classList.remove('hidden');
-            }
-            if(q.type === 'writing') {
-                document.getElementById('writing-tool').classList.remove('hidden');
-                document.getElementById('next-btn').classList.remove('hidden');
-            }
-            if(q.type === 'memory') runMagic(q);
-            
-            if(q.a) {
-                q.a.forEach((opt, i) => {
-                    const b = document.createElement('button');
-                    b.className = "w-full p-4 rounded-xl bg-slate-800 border border-slate-700 text-left hover:border-yellow-500 transition-all";
-                    b.innerText = opt;
-                    b.onclick = () => check(i, q.c, b);
-                    document.getElementById('options-grid').appendChild(b);
-                });
-            }
-        }
+<div id="reading" class="mt-4"></div>
 
-        function runMagic(q) {
-            const tool = document.getElementById('magic-tool');
-            tool.classList.remove('hidden');
-            tool.innerHTML = "";
-            q.words.forEach((w, i) => {
-                const c = document.createElement('div');
-                c.className = "magic-card";
-                c.style.left = `${i * 120}px`;
-                c.innerHTML = `<div class="inner"><div class="front">${w}</div><div class="back">BE</div></div>`;
-                tool.appendChild(c);
-            });
+<div id="memory" class="stage mt-6"></div>
 
-            setTimeout(() => {
-                document.querySelectorAll('.magic-card').forEach(c => c.classList.add('flipped'));
-                // Shuffle logic here...
-                document.getElementById('q-text').innerText = `Where is the word: ${q.target}?`;
-                document.getElementById('next-btn').classList.remove('hidden');
-            }, 3000);
-        }
+<div id="options" class="space-y-3 mt-6"></div>
 
-        function check(idx, correct, btn) {
-            if(idx === correct) { btn.style.borderColor = "#22c55e"; state.score++; }
-            else { btn.style.borderColor = "#ef4444"; }
-            document.querySelectorAll('#options-grid button').forEach(b => b.disabled = true);
-            document.getElementById('next-btn').classList.remove('hidden');
-        }
+<div id="explain" class="explain"></div>
 
-        function nextQ() {
-            state.cur++;
-            if(state.cur < BANK.length) render();
-            else finish();
-        }
+<button id="next" onclick="nextQ()" class="hidden mt-6 bg-white text-black px-6 py-2 rounded">
+Next
+</button>
 
-        function finish() {
-            // تجميع الداتا لإرسالها
-            const report = `
-                Student: ${state.user.name}
-                Score: ${state.score}/30
-                Logs: ${state.logs.join(' | ')}
-            `;
-            
-            // هنا تقدر تستخدم EmailJS أو Telegram API لإرسال التقرير فوراً
-            console.log("Report Sent:", report);
+</div>
 
-            document.getElementById('quiz-area').innerHTML = `
-                <div class="text-center">
-                    <h2 class="text-4xl font-bold text-yellow-500 mb-4">Assessment Finished!</h2>
-                    <p class="text-xl">Your score and behavior report have been sent to the academy.</p>
-                    <p class="mt-4 text-slate-400">Security Hash: ${btoa(state.user.name + state.score)}</p>
-                </div>
-            `;
-        }
-    </script>
+</div>
+
+<script>
+
+let state={
+i:0,
+score:0
+}
+
+let cheat=0
+
+document.addEventListener("visibilitychange",function(){
+
+if(document.hidden){
+cheat++
+if(cheat>2){
+alert("Test closed due to cheating")
+finish()
+}
+}
+
+})
+
+const questions=[
+
+{
+type:"grammar",
+q:"Hardly ___ the meeting when the alarm rang",
+options:["I started","had I started","did I start","I start"],
+c:1,
+ex:"After hardly we use inversion form had I started."
+},
+
+{
+type:"grammar",
+q:"Despite ___ a lot of experience he failed",
+options:["have","having","to have","has"],
+c:1,
+ex:"After despite we use verb+ing."
+},
+
+{
+type:"reading",
+text:"Strong communication is the core of every successful company. Teams that exchange ideas clearly solve problems faster and reduce mistakes.",
+q:"What improves problem solving in teams",
+options:[
+Clear communication,
+More meetings,
+Less feedback,
+Working alone
+],
+c:0
+},
+
+{
+type:"scenario",
+q:"Client angry about delay. Best response",
+options:[
+Ignore message,
+Apologize explain delay,
+Blame supplier,
+Tell client wait
+],
+c:1
+},
+
+{
+type:"memory",
+target:"Laptop",
+cards:[
+{word:"Laptop",img:"https://cdn-icons-png.flaticon.com/512/1041/1041916.png"},
+{word:"Phone",img:"https://cdn-icons-png.flaticon.com/512/15/15874.png"},
+{word:"Camera",img:"https://cdn-icons-png.flaticon.com/512/685/685655.png"},
+{word:"Tablet",img:"https://cdn-icons-png.flaticon.com/512/888/888879.png"}
+]
+}
+
+]
+
+function startTest(){
+
+document.getElementById("start").style.display="none"
+document.getElementById("quiz").classList.remove("hidden")
+
+render()
+
+}
+
+function render(){
+
+let q=questions[state.i]
+
+document.getElementById("counter").innerText=
+(state.i+1)+" / "+questions.length
+
+document.getElementById("options").innerHTML=""
+document.getElementById("reading").innerHTML=""
+document.getElementById("memory").innerHTML=""
+document.getElementById("explain").innerHTML=""
+document.getElementById("next").classList.add("hidden")
+
+if(q.type=="reading"){
+
+document.getElementById("reading").innerText=q.text
+
+}
+
+document.getElementById("question").innerHTML=
+"<h2 class='text-xl font-bold'>"+q.q+"</h2>"
+
+if(q.type=="memory"){
+
+runMemory(q)
+
+return
+
+}
+
+q.options.forEach((o,i)=>{
+
+let div=document.createElement("div")
+div.className="option"
+div.innerText=o
+
+div.onclick=()=>choose(i,q)
+
+document.getElementById("options").appendChild(div)
+
+})
+
+}
+
+function choose(i,q){
+
+let opts=document.querySelectorAll(".option")
+
+opts.forEach(x=>x.onclick=null)
+
+if(i==q.c){
+
+opts[i].classList.add("correct")
+state.score++
+
+}else{
+
+opts[i].classList.add("wrong")
+opts[q.c].classList.add("correct")
+
+}
+
+if(q.ex){
+
+document.getElementById("explain").innerText=q.ex
+
+}
+
+document.getElementById("next").classList.remove("hidden")
+
+}
+
+function runMemory(q){
+
+let stage=document.getElementById("memory")
+
+let pos=[10,35,60,85]
+
+q.cards.forEach((c,i)=>{
+
+let d=document.createElement("div")
+
+d.className="mem"
+
+d.style.left="calc("+pos[i]+"% - 60px)"
+
+d.innerHTML="<img src='"+c.img+"' width=60><br>"+c.word
+
+d.dataset.word=c.word
+
+stage.appendChild(d)
+
+})
+
+setTimeout(()=>{
+
+document.querySelectorAll(".mem").forEach(c=>{
+
+c.classList.add("logoBack")
+c.innerHTML=""
+
+})
+
+shuffle(q)
+
+},10000)
+
+}
+
+function shuffle(q){
+
+let cards=[...document.querySelectorAll(".mem")]
+
+let moves=0
+
+let int=setInterval(()=>{
+
+moves++
+
+cards.forEach(c=>{
+
+let x=Math.random()*80
+c.style.left="calc("+x+"% - 60px)"
+
+})
+
+if(moves>5){
+
+clearInterval(int)
+
+cards.forEach(c=>{
+
+c.onclick=()=>pick(c,q)
+
+})
+
+}
+
+},600)
+
+}
+
+function pick(card,q){
+
+let cards=document.querySelectorAll(".mem")
+
+cards.forEach(c=>{
+
+let word=c.dataset.word
+
+let data=q.cards.find(x=>x.word==word)
+
+c.innerHTML="<img src='"+data.img+"' width=60><br>"+word
+
+})
+
+if(card.dataset.word==q.target){
+
+state.score++
+
+card.classList.add("correct")
+
+}else{
+
+card.classList.add("wrong")
+
+}
+
+document.getElementById("next").classList.remove("hidden")
+
+}
+
+function nextQ(){
+
+state.i++
+
+if(state.i<questions.length){
+
+render()
+
+}else{
+
+finish()
+
+}
+
+}
+
+function finish(){
+
+let name=document.getElementById("name").value
+
+let text="Student "+name+" Score "+state.score
+
+let url="https://wa.me/201144576661?text="+encodeURIComponent(text)
+
+window.open(url)
+
+document.body.innerHTML="<h1 style='text-align:center;margin-top:100px'>Test Completed</h1>"
+
+}
+
+</script>
+
 </body>
 </html>

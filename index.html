@@ -10,13 +10,13 @@
 
 <script src="https://cdn.tailwindcss.com"></script>
 
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
 
 <style>
 
 body{
-font-family:Montserrat,Cairo;
 margin:0;
+font-family:Montserrat,Cairo;
 color:white;
 background:#020617;
 overflow-x:hidden;
@@ -27,9 +27,9 @@ position:fixed;
 width:100%;
 height:100%;
 z-index:-1;
-background:linear-gradient(-45deg,#020617,#1e1b4b,#172554,#0f172a);
+background:linear-gradient(-45deg,#020617,#0f172a,#1e1b4b,#172554);
 background-size:400% 400%;
-animation:grad 15s ease infinite;
+animation:grad 14s ease infinite;
 }
 
 @keyframes grad{
@@ -38,23 +38,25 @@ animation:grad 15s ease infinite;
 100%{background-position:0% 50%}
 }
 
-.card{
-background:rgba(15,23,42,.88);
-backdrop-filter:blur(20px);
-border-radius:26px;
+.glass{
+background:rgba(15,23,42,.85);
+backdrop-filter:blur(18px);
+border-radius:24px;
 border:1px solid rgba(255,255,255,.08);
 }
 
 .option{
 background:#1e293b;
-padding:16px;
+padding:14px;
 border-radius:12px;
 border:1px solid #334155;
 cursor:pointer;
+transition:.2s;
 }
 
 .option:hover{
 border-color:#fbbf24;
+transform:translateY(-2px);
 }
 
 .correct{
@@ -65,32 +67,22 @@ background:#065f46;
 background:#7f1d1d;
 }
 
-.explain{
-color:#fbbf24;
-margin-top:10px;
-font-size:14px;
-}
-
-.stage{
+.memoryStage{
 position:relative;
-height:220px;
+height:200px;
 }
 
-.mem{
-width:120px;
-height:150px;
+.card{
+width:110px;
+height:140px;
 position:absolute;
 border-radius:12px;
 border:2px solid #fbbf24;
 display:flex;
 align-items:center;
 justify-content:center;
-cursor:pointer;
 background:#1e293b;
-}
-
-.logoBack{
-background:url(logo.jpg) center/cover;
+cursor:pointer;
 }
 
 </style>
@@ -103,40 +95,68 @@ background:url(logo.jpg) center/cover;
 
 <div class="flex justify-center mt-16">
 
-<div class="card p-10 max-w-xl w-full text-center" id="start">
+<div id="start" class="glass p-10 w-[420px] text-center">
 
-<h1 class="text-3xl font-black mb-6">
-Bel-Engleezi Elite Test
-</h1>
+<h1 class="text-3xl font-black mb-6">Bel-Engleezi Test</h1>
 
-<input id="name" placeholder="Full name" class="w-full p-3 rounded bg-slate-900 border border-slate-600 mb-4">
+<input id="name" placeholder="Full Name"
+class="w-full p-3 rounded bg-slate-900 border border-slate-600 mb-4">
 
-<button onclick="startTest()" class="bg-yellow-500 text-black px-8 py-3 rounded font-bold">
+<select id="age"
+class="w-full p-3 rounded bg-slate-900 border border-slate-600 mb-4">
+
+<option value="">Age Group</option>
+<option value="under20">Under 20</option>
+<option value="over20">Over 20</option>
+
+</select>
+
+<select id="gender"
+class="w-full p-3 rounded bg-slate-900 border border-slate-600 mb-6">
+
+<option value="">Gender</option>
+<option value="male">Male</option>
+<option value="female">Female</option>
+
+</select>
+
+<button onclick="startTest()"
+class="bg-yellow-500 text-black px-8 py-3 rounded font-bold w-full">
+
 Start Test
+
 </button>
 
 </div>
 
 </div>
 
-<div id="quiz" class="hidden flex justify-center mt-10">
+<div id="quiz"
+class="hidden flex justify-center mt-10">
 
-<div class="card p-8 max-w-3xl w-full">
+<div class="glass p-8 w-[700px]">
 
-<div id="counter" class="mb-4 text-yellow-400 font-bold"></div>
+<div id="counter"
+class="text-yellow-400 font-bold mb-4"></div>
 
-<div id="question"></div>
+<div id="question"
+class="text-xl font-bold mb-4"></div>
 
-<div id="reading" class="mt-4"></div>
+<div id="options"
+class="space-y-3"></div>
 
-<div id="memory" class="stage mt-6"></div>
+<div id="explain"
+class="text-yellow-400 text-sm mt-3"></div>
 
-<div id="options" class="space-y-3 mt-6"></div>
+<div id="memory"
+class="memoryStage mt-6"></div>
 
-<div id="explain" class="explain"></div>
+<button id="next"
+onclick="nextQ()"
+class="hidden mt-6 bg-white text-black px-6 py-2 rounded">
 
-<button id="next" onclick="nextQ()" class="hidden mt-6 bg-white text-black px-6 py-2 rounded">
 Next
+
 </button>
 
 </div>
@@ -155,11 +175,17 @@ let cheat=0
 document.addEventListener("visibilitychange",function(){
 
 if(document.hidden){
+
 cheat++
+
 if(cheat>2){
-alert("Test closed due to cheating")
+
+alert("Test closed because of tab switching")
+
 finish()
+
 }
+
 }
 
 })
@@ -168,40 +194,30 @@ const questions=[
 
 {
 type:"grammar",
-q:"Hardly ___ the meeting when the alarm rang",
-options:["I started","had I started","did I start","I start"],
+q:"Hardly ___ the meeting when the alarm rang.",
+a:["I started","had I started","did I start","I start"],
 c:1,
-ex:"After hardly we use inversion form had I started."
+ex:"After hardly we use inversion form. had I started."
 },
 
 {
 type:"grammar",
-q:"Despite ___ a lot of experience he failed",
-options:["have","having","to have","has"],
+q:"Despite ___ a lot of experience he failed.",
+a:["have","having","to have","has"],
 c:1,
 ex:"After despite we use verb+ing."
 },
 
 {
-type:"reading",
-text:"Strong communication is the core of every successful company. Teams that exchange ideas clearly solve problems faster and reduce mistakes.",
-q:"What improves problem solving in teams",
-options:[
-Clear communication,
-More meetings,
-Less feedback,
-Working alone
-],
-c:0
-},
-
-{
 type:"scenario",
-q:"Client angry about delay. Best response",
-options:[
-Ignore message,
-Apologize explain delay,
-Blame supplier,
+q:"Client angry about delay. Best response?",
+a:[
+Ignore message
+,
+Apologize and explain delay
+,
+Blame another department
+,
 Tell client wait
 ],
 c:1
@@ -211,16 +227,28 @@ c:1
 type:"memory",
 target:"Laptop",
 cards:[
-{word:"Laptop",img:"https://cdn-icons-png.flaticon.com/512/1041/1041916.png"},
-{word:"Phone",img:"https://cdn-icons-png.flaticon.com/512/15/15874.png"},
-{word:"Camera",img:"https://cdn-icons-png.flaticon.com/512/685/685655.png"},
-{word:"Tablet",img:"https://cdn-icons-png.flaticon.com/512/888/888879.png"}
+{w:"Laptop"},
+{w:"Phone"},
+{w:"Camera"},
+{w:"Tablet"}
 ]
 }
 
 ]
 
 function startTest(){
+
+let name=document.getElementById("name").value
+let age=document.getElementById("age").value
+let gender=document.getElementById("gender").value
+
+if(!name||!age||!gender){
+
+alert("Complete the data")
+
+return
+
+}
 
 document.getElementById("start").style.display="none"
 document.getElementById("quiz").classList.remove("hidden")
@@ -237,21 +265,13 @@ document.getElementById("counter").innerText=
 (state.i+1)+" / "+questions.length
 
 document.getElementById("options").innerHTML=""
-document.getElementById("reading").innerHTML=""
+document.getElementById("explain").innerText=""
 document.getElementById("memory").innerHTML=""
-document.getElementById("explain").innerHTML=""
 document.getElementById("next").classList.add("hidden")
 
-if(q.type=="reading"){
+document.getElementById("question").innerText=q.q||"Memory Question"
 
-document.getElementById("reading").innerText=q.text
-
-}
-
-document.getElementById("question").innerHTML=
-"<h2 class='text-xl font-bold'>"+q.q+"</h2>"
-
-if(q.type=="memory"){
+if(q.type==="memory"){
 
 runMemory(q)
 
@@ -259,13 +279,15 @@ return
 
 }
 
-q.options.forEach((o,i)=>{
+q.a.forEach((o,i)=>{
 
 let div=document.createElement("div")
+
 div.className="option"
+
 div.innerText=o
 
-div.onclick=()=>choose(i,q)
+div.onclick=()=>answer(i,q)
 
 document.getElementById("options").appendChild(div)
 
@@ -273,20 +295,22 @@ document.getElementById("options").appendChild(div)
 
 }
 
-function choose(i,q){
+function answer(i,q){
 
 let opts=document.querySelectorAll(".option")
 
 opts.forEach(x=>x.onclick=null)
 
-if(i==q.c){
+if(i===q.c){
 
 opts[i].classList.add("correct")
+
 state.score++
 
 }else{
 
 opts[i].classList.add("wrong")
+
 opts[q.c].classList.add("correct")
 
 }
@@ -311,13 +335,13 @@ q.cards.forEach((c,i)=>{
 
 let d=document.createElement("div")
 
-d.className="mem"
+d.className="card"
 
-d.style.left="calc("+pos[i]+"% - 60px)"
+d.style.left="calc("+pos[i]+"% - 55px)"
 
-d.innerHTML="<img src='"+c.img+"' width=60><br>"+c.word
+d.innerText=c.w
 
-d.dataset.word=c.word
+d.dataset.word=c.w
 
 stage.appendChild(d)
 
@@ -325,10 +349,9 @@ stage.appendChild(d)
 
 setTimeout(()=>{
 
-document.querySelectorAll(".mem").forEach(c=>{
+document.querySelectorAll(".card").forEach(c=>{
 
-c.classList.add("logoBack")
-c.innerHTML=""
+c.innerText="BE"
 
 })
 
@@ -340,24 +363,25 @@ shuffle(q)
 
 function shuffle(q){
 
-let cards=[...document.querySelectorAll(".mem")]
+let cards=[...document.querySelectorAll(".card")]
 
 let moves=0
 
-let int=setInterval(()=>{
+let inter=setInterval(()=>{
 
 moves++
 
 cards.forEach(c=>{
 
 let x=Math.random()*80
-c.style.left="calc("+x+"% - 60px)"
+
+c.style.left="calc("+x+"% - 55px)"
 
 })
 
 if(moves>5){
 
-clearInterval(int)
+clearInterval(inter)
 
 cards.forEach(c=>{
 
@@ -373,23 +397,11 @@ c.onclick=()=>pick(c,q)
 
 function pick(card,q){
 
-let cards=document.querySelectorAll(".mem")
-
-cards.forEach(c=>{
-
-let word=c.dataset.word
-
-let data=q.cards.find(x=>x.word==word)
-
-c.innerHTML="<img src='"+data.img+"' width=60><br>"+word
-
-})
-
-if(card.dataset.word==q.target){
-
-state.score++
+if(card.dataset.word===q.target){
 
 card.classList.add("correct")
+
+state.score++
 
 }else{
 
@@ -420,14 +432,23 @@ finish()
 function finish(){
 
 let name=document.getElementById("name").value
+let age=document.getElementById("age").value
+let gender=document.getElementById("gender").value
 
-let text="Student "+name+" Score "+state.score
+let text=
+"Student "+name+
+" Age "+age+
+" Gender "+gender+
+" Score "+state.score
 
-let url="https://wa.me/201144576661?text="+encodeURIComponent(text)
+let url=
+"https://wa.me/201144576661?text="+
+encodeURIComponent(text)
 
 window.open(url)
 
-document.body.innerHTML="<h1 style='text-align:center;margin-top:100px'>Test Completed</h1>"
+document.body.innerHTML=
+"<h1 style='text-align:center;margin-top:120px'>Test Finished</h1>"
 
 }
 
